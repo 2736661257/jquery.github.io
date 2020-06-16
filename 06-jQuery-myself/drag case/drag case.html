@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>drag case</title>
+	<script src="jquery.js" type="text/javascript"></script>
+	<style type="text/css">
+		*
+		{
+			margin: 0px;
+			padding: 0px;
+		}
+		#drag
+		{
+			width: 150px;
+			height: 200px;
+			position: absolute;
+			background: #29D3D0;
+			left: 100px;
+			top: 100px;
+		}
+		#dragDiv
+		{
+			width: 100%;
+			height: 25%;
+			position: absolute;
+			background: #1513D8;
+			
+			
+		}
+	</style>
+</head>
+
+<body>
+	<div id="drag">
+		<div id="dragDiv"></div>
+	</div>
+</body>
+	
+	<script type="text/javascript">
+		//1. 定义标杆决定drag是否移动
+        var flag = false;
+
+    //定义变量保存：求鼠标按下时鼠标离drag框距离
+        var x,y;
+		
+		 //2. 给dragDiv注册鼠标事件
+        $("#dragDiv").mousedown(function(event){
+            //2.1.按下标杆为true
+                flag = true;
+            //求鼠标按下时鼠标离浏览器的距离A
+                var oldX = event.pageX;
+                var oldY = event.pageY;
+
+
+            //4. 求鼠标按下时drag距离浏览器的距离B
+                var dragX = $("#drag").offset().left;
+                var dragY = $("#drag").offset().top;
+
+            //求鼠标按下时鼠标离drag框距离
+                x = oldX - dragX;
+                y = oldY - dragY;
+
+        }).mouseup(function(){
+            //2.1.按下标杆为true
+                flag = false;
+        });
+
+    //3. 注册移动事件
+        $(document).mousemove(function(event){
+            //通过判断flag是否为真：是：移动  不是：不移动
+            if(flag){
+                //获取鼠标的坐标
+                    var curX = event.pageX;
+                    var curY = event.pageY;
+
+				
+				 //感觉这里最难 理解的就是这个怎么实现的鼠标移动框也跟着移动：现在理解的是鼠标移动事件获取鼠标坐标，然后将坐标 通过给div框添加样式赋值来实现鼠标和框的同步；
+				//但是由于框的定位为左上角会出现点击中间鼠标宽就会向左下 角移动，使得鼠标一直在框的左上角，所以就通过：鼠标的 坐标减去框的坐标然后再赋值就能实现了。
+                //把鼠标的坐标赋值给drag
+                    $("#drag").css({left:curX - x +"px",top:curY - y +"px"});    
+            }
+        });
+	</script>
+</html>
